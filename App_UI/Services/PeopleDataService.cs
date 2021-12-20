@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Text.Json;
+using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace App_UI.Services
 {
@@ -139,26 +141,39 @@ namespace App_UI.Services
 
         }
 
-        /// <summary>
+        //// <summary>
         /// Sert à remplir la collection avec la string reçu en paramètre
         /// </summary>
-        /// <param name="allContent">Le contenu doit être compatible JSON</param>
+       /// <param name="allContent">Le contenu doit être compatible JSON</param>
         /// <returns>Le nombre d'enregistrement importée</returns>
-        public int SetAllFromJson(string allContent)
+        public String SetAllFromJson(String allContent)
         {
+
+
+
             /// TODO 01c : Compléter la méthode pour convertir les données
-            
-            return 0;
+            /// 
+
+
+            String jsonString = JsonConvert.SerializeObject(allContent);
+
+            return jsonString;
         }
 
         /// <summary>
         /// Sérialise les données de la collection en format JSon
         /// </summary>
         /// <returns>Une string en format json</returns>
-        public string GetAllAsJson()
+        public String GetAllAsJson(string jsonString)
         {
+            /// 
             /// TODO 02b : Compléter la méthode pour convertir les données
-            return string.Empty;
+            /// 
+
+            Person p = JsonConvert.DeserializeObject<Person>(jsonString);
+
+
+            return p.ToString();
         }
 
         public IEnumerable<Person> GetAll()

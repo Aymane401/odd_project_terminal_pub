@@ -236,6 +236,7 @@ namespace App_UI.ViewModels
 
             /// TODO 03a : Compléter ValidateDataCommand
 
+            ValidateDataCommand = new DelegateCommand<string>(ValidateData);
             SaveCommand = new DelegateCommand<string>(SaveData, CanSave);
             CancelCommand = new DelegateCommand<string>(CancelChange, CanCancel);
             DeleteCommand = new DelegateCommand<string>(DeleteData, CanDelete);
@@ -305,9 +306,9 @@ namespace App_UI.ViewModels
         /// </summary>
         private void initRegEx()
         {
-            ReProvince = new Regex(@"TODO");
-            RePhoneNumber = new Regex(@"TODO");
-            RePostalCode = new Regex(@"TODO");
+            ReProvince = new Regex(@"[A-z]{2}");
+            RePhoneNumber = new Regex(@"(\d{3}-){3}\d{4}");
+            RePostalCode = new Regex(@"/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/ | \d{5} ");
 
             ReEmail = new Regex(@"([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*");
         }
@@ -381,5 +382,8 @@ namespace App_UI.ViewModels
             OnPropertyChanged(nameof(Email));
             OnPropertyChanged(nameof(BirthDay));
         }
+
+
+
     }
 }

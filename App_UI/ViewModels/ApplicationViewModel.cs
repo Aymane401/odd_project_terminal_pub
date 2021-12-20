@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Windows;
 
 namespace App_UI.ViewModels
 {
@@ -92,6 +93,11 @@ namespace App_UI.ViewModels
         /// </summary>
         public DelegateCommand<string> ChangeLanguageCommand { get; set; }
 
+        public DelegateCommand<object> changeLanguageEnCommand { get; set; }
+        public DelegateCommand<object> changeLanguageFrCommand { get; set; }
+
+
+
 
         #endregion
 
@@ -118,9 +124,65 @@ namespace App_UI.ViewModels
             ChangePageCommand = new DelegateCommand<string>(ChangePage);
             ExportCommand = new DelegateCommand<string>(ExportData);
             NewRecordCommand = new DelegateCommand<string>(RecordCreate);
+            ImportCommand =  new DelegateCommand<string>(ImportData);
+            changeLanguageEnCommand = new DelegateCommand<object>(changeLanguageEn, CanChangeLanguage);
+            changeLanguageFrCommand = new DelegateCommand<object>(changeLanguageFr, CanChangeLanguage);
 
         }
+        public void Restart(object arg)
+        {
 
+            var filename = Application.ResourceAssembly.Location;
+            var newFile = Path.ChangeExtension(filename, ".exe");
+            Process.Start(newFile);
+            Application.Current.Shutdown();
+        }
+
+
+        private bool CanChangeLanguage(object arg) => true;
+        private void changeLanguageFr(object arg)
+        {
+            string param = Properties.Settings.Default.Language;
+            if (param == "fr")
+            {
+                MessageBoxResult messageErrorBoxResult = System.Windows.MessageBox.Show("Deja en francais!");
+            }
+            else
+            {
+
+
+                MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Change language to french?", "Language", System.Windows.MessageBoxButton.YesNo);
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    Properties.Settings.Default.Language = "fr";
+
+                    Properties.Settings.Default.Save();
+                    Restart(arg);
+                }
+            }
+        }
+        private void changeLanguageEn(object arg)
+        {
+            string param = Properties.Settings.Default.Language;
+            if (param == "en")
+            {
+                MessageBoxResult messageErrorBoxResult = System.Windows.MessageBox.Show("Already in english");
+            }
+            else
+            {
+
+
+                MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Changer le language pour l'anglais?", "Language", System.Windows.MessageBoxButton.YesNo);
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    Properties.Settings.Default.Language = "en";
+
+                    Properties.Settings.Default.Save();
+                    Restart(arg);
+                }
+            }
+        }
+        
         private void RecordCreate(string obj)
         {
             usersViewModel?.CreateEmptyUser();
@@ -130,13 +192,42 @@ namespace App_UI.ViewModels
         {
             /// TODO 02a : Compléter ExportData
             /// Utiliser PeopleDataService.Instance.GetAllAsJson() pour récupérer le json
+            /// 
+            using (StreamWriter outputFile = new StreamWriter(obj))
+            {
+
+                outputFile.WriteLine(PeopleDataService.Instance.GetAllAsJson(PeopleDataService.Instance.GetAllAsJson("")));
+            }
+            
         }
 
         private async void ImportData(string obj)
         {
             /// TODO 01b : Compléter la commande d'importation
             /// Utiliser PeopleDataService.Instance.SetAllFromJson(string allContent)
-            
+            /// 
+
+
+
+            String filevalue = "";
+
+            try
+            {
+
+                using (var sr = new StreamReader(obj))
+                {
+                    filevalue = sr.ReadToEnd();
+
+                    PeopleDataService.Instance.SetAllFromJson(filevalue);
+                    Console.WriteLine(sr.ReadToEnd());
+                }
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine("fivchier non lu");
+                Console.WriteLine(e.Message);
+            }
+          
         }
 
         private void initViewModels()

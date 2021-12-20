@@ -26,10 +26,11 @@
                 <MenuItem Header="{x:Static p:Resources.mi_preferences}" Command="{Binding ChangePageCommand}" CommandParameter="ConfigurationViewModel"/>
                 <Separator />
                 <MenuItem Header="{x:Static p:Resources.mi_import}" Command="{Binding ImportCommand}" CommandParameter="" />
-                <MenuItem Header="{x:Static p:Resources.mi_export}" Command="{Binding ExportCommand}" CommandParameter="" />                
+                <MenuItem Header="{x:Static p:Resources.mi_export}" Command="{Binding ExportCommand}" CommandParameter="" />
             </MenuItem>
             <MenuItem Header="{x:Static p:Resources.mi_language}">
-                <MenuItem Header="English" Command="{Binding ChangeLanguageCommand}" CommandParameter="en" />
+                <MenuItem Header="French" Command="{Binding changeLanguageFrCommand}" CommandParameter="en" />
+                <MenuItem Header="English" Command="{Binding changeLanguageEnCommand}" CommandParameter="fr" />
                 <!-- TODO Ajouter l'item "Français" pour changer la langue en français -->
             </MenuItem>
         </Menu>
